@@ -1,0 +1,487 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>The Last Chapter | Farewell</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&family=Playfair+Display:ital,wght@0,700;0,900;1,700;1,900&family=Homemade+Apple&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    :root { --bg: #0A0A0A; --paper: #F9F9F7; --accent: #C5A059; }
+    body { font-family: 'Inter', sans-serif; background-color: var(--bg); color: var(--paper); overflow-x: hidden; line-height: 1.6; }
+    ::selection { background-color: var(--accent); color: white; }
+    .serif { font-family: 'Playfair Display', serif; }
+    .handwritten { font-family: 'Homemade Apple', cursive; }
+    .grain-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 9999; opacity: 0.05; background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.7' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E"); }
+    .toast { position: fixed; bottom: 3rem; left: 50%; transform: translateX(-50%) translateY(1rem); z-index: 100; background: rgba(23, 23, 23, 0.9); backdrop-filter: blur(40px); border: 1px solid rgba(255, 255, 255, 0.1); padding: 1rem 2rem; border-radius: 9999px; box-shadow: 0 20px 50px rgba(0,0,0,0.5); opacity: 0; pointer-events: none; transition: all 0.5s ease; }
+    .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+    .toast p { font-family: 'Playfair Display', serif; font-style: italic; color: var(--accent); font-size: 0.875rem; white-space: nowrap; }
+    header { min-height: 75vh; display: flex; flex-direction: column; align-items: center; padding: 12rem 1.5rem 3rem; position: relative; overflow: hidden; }
+    .watermark { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 100%; text-align: center; pointer-events: none; }
+    .watermark h1 { font-family: 'Playfair Display', serif; font-size: 28vw; line-height: 1; font-weight: 900; font-style: italic; letter-spacing: -0.05em; color: white; opacity: 0.012; user-select: none; text-transform: uppercase; }
+    .hero-content { position: relative; text-align: center; max-width: 80rem; z-index: 10; width: 100%; }
+    .hero-content > * { opacity: 0; animation: fadeIn 1.2s cubic-bezier(0.19, 1, 0.22, 1) forwards; }
+    .subtitle { font-family: 'Homemade Apple', cursive; font-size: 1.5rem; color: rgba(197, 160, 89, 0.7); margin-bottom: 1rem; animation-delay: 0s; }
+    .main-title { font-family: 'Playfair Display', serif; font-size: clamp(3rem, 8vw, 8rem); font-weight: 900; line-height: 0.85; letter-spacing: -0.05em; color: white; animation-delay: 0.1s; }
+    .main-title .underline { font-style: italic; color: rgba(255, 255, 255, 0.3); text-decoration: underline; text-decoration-color: rgba(197, 160, 89, 0.3); text-underline-offset: 12px; text-decoration-thickness: 1px; }
+    .intro-text { margin-top: 3rem; color: rgba(255, 255, 255, 0.5); max-width: 42rem; margin-left: auto; margin-right: auto; font-size: 1rem; line-height: 1.6; letter-spacing: 0.02em; font-weight: 300; animation-delay: 0.2s; }
+    .stats { margin-top: 4rem; padding-top: 3rem; border-top: 1px solid rgba(255, 255, 255, 0.05); display: flex; flex-wrap: wrap; justify-content: center; gap: 3rem 3rem; animation-delay: 0.3s; }
+    .stat { text-align: center; transition: all 0.3s ease; }
+    .stat:hover .stat-number { color: var(--accent); }
+    .stat-number { font-family: 'Playfair Display', serif; font-style: italic; font-weight: 900; font-size: 1.5rem; color: white; transition: color 0.3s ease; }
+    .stat-label { font-size: 0.5625rem; font-weight: 900; text-transform: uppercase; letter-spacing: 0.2em; color: rgba(255, 255, 255, 0.2); margin-top: 0.25rem; }
+    .stat-divider { width: 1px; height: 2.5rem; background: rgba(255, 255, 255, 0.05); }
+    .note-section { max-width: 80rem; margin: 0 auto; padding: 1rem 1.5rem 3rem; display: flex; flex-direction: column; align-items: center; }
+    .selector-container { text-align: center; margin-bottom: 3rem; width: 100%; }
+    .selector-label { color: var(--accent); font-weight: 700; text-transform: uppercase; letter-spacing: 0.4em; font-size: 0.625rem; margin-bottom: 1rem; }
+    .select-wrapper { position: relative; display: inline-block; width: 100%; max-width: 32rem; }
+    select { width: 100%; background: rgba(23, 23, 23, 0.8); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.1); padding: 1.25rem 2rem; border-radius: 1rem; text-align: center; font-size: 1.25rem; font-family: 'Playfair Display', serif; color: white; outline: none; cursor: pointer; appearance: none; box-shadow: 0 20px 50px rgba(0,0,0,0.5); transition: all 0.3s ease; }
+    select:hover { background: rgba(38, 38, 38, 0.8); }
+    select:focus { border-color: rgba(197, 160, 89, 0.5); }
+    select option { background: #171717; color: white; }
+    .select-arrow { position: absolute; right: 2rem; top: 50%; transform: translateY(-50%); pointer-events: none; opacity: 0.4; }
+    .envelope-container { perspective: 1500px; width: 100%; max-width: 50rem; margin: 0 auto; }
+    .envelope-base { position: relative; background: #F4F4F2; transition: all 0.8s cubic-bezier(0.19, 1, 0.22, 1); transform-style: preserve-3d; box-shadow: 0 40px 100px -20px rgba(0,0,0,0.5); border-radius: 0.5rem; }
+    .envelope-flap { position: absolute; top: 0; left: 0; width: 100%; height: 50%; background: #EBEBE9; clip-path: polygon(0 0, 100% 0, 50% 100%); transform-origin: top; transition: transform 0.8s cubic-bezier(0.19, 1, 0.22, 1); z-index: 10; cursor: pointer; }
+    .envelope-base.open .envelope-flap { transform: rotateX(180deg); z-index: 40; }
+    .envelope-flap:hover { background: rgba(212, 212, 210, 0.4); }
+    .flap-close-text { transform: rotateX(180deg); margin-top: 1.5rem; text-align: center; font-size: 0.625rem; font-weight: 900; text-transform: uppercase; letter-spacing: 0.5em; color: rgba(115, 115, 115, 0.6); border-bottom: 1px solid transparent; padding-bottom: 0.25rem; display: inline-block; transition: all 0.3s ease; opacity: 0; }
+    .envelope-base.open .flap-close-text { opacity: 1; }
+    .envelope-flap:hover .flap-close-text { color: rgb(120, 82, 46); border-bottom-color: rgb(120, 82, 46); }
+    .letter-paper { background: #F9F9F7; color: #0A0A0A; padding: 5rem; box-shadow: 0 50px 100px rgba(0,0,0,0.3); position: relative; overflow: hidden; max-width: 64rem; margin: 0 auto; border-top: 10px solid rgba(197, 160, 89, 0.1); opacity: 0; transform: translateY(50px) scale(0.95); transition: all 1s cubic-bezier(0.19, 1, 0.22, 1) 0.2s; }
+    .envelope-base.open .letter-paper { opacity: 1; transform: translateY(0) scale(1); }
+    .letter-texture { position: absolute; inset: 0; opacity: 0.03; pointer-events: none; background-image: url('https://www.transparenttextures.com/patterns/natural-paper.png'); }
+    .letter-header { margin-bottom: 3rem; opacity: 0; animation: fadeIn 1.2s cubic-bezier(0.19, 1, 0.22, 1) 0.6s forwards; }
+    .letter-greeting { font-family: 'Homemade Apple', cursive; font-size: 1.5rem; color: rgba(163, 163, 163, 1); margin-bottom: 1rem; }
+    .letter-divider { height: 1px; width: 3rem; background: rgba(10, 10, 10, 0.1); }
+    .letter-content { min-height: 140px; display: flex; flex-direction: column; justify-content: center; opacity: 0; animation: fadeIn 1.2s cubic-bezier(0.19, 1, 0.22, 1) 1.4s forwards; }
+    .letter-text { font-family: 'Playfair Display', serif; font-size: 2rem; line-height: 1.4; font-weight: 700; font-style: italic; letter-spacing: -0.02em; color: rgba(38, 38, 38, 1); animation: textReveal 1.5s cubic-bezier(0.19, 1, 0.22, 1) forwards; }
+    .letter-footer { margin-top: 4rem; padding-top: 2.5rem; border-top: 1px solid rgba(229, 229, 229, 1); display: flex; justify-content: space-between; align-items: flex-end; gap: 2.5rem; opacity: 0; animation: fadeIn 1.2s cubic-bezier(0.19, 1, 0.22, 1) 2.6s forwards; }
+    .signature-block { display: flex; flex-direction: column; align-items: flex-end; gap: 2rem; }
+    .signature-name { font-family: 'Homemade Apple', cursive; font-size: 2rem; color: rgba(10, 10, 10, 1); margin-bottom: 0.5rem; }
+    .signature-date { font-size: 0.625rem; font-weight: 900; text-transform: uppercase; letter-spacing: 0.4em; color: rgba(163, 163, 163, 1); font-style: italic; }
+    .download-btn { display: flex; align-items: center; gap: 0.5rem; font-size: 0.5625rem; font-weight: 900; text-transform: uppercase; letter-spacing: 0.2em; border: 1px solid rgba(229, 229, 229, 1); padding: 0.75rem 1.5rem; border-radius: 9999px; background: transparent; color: rgba(163, 163, 163, 1); cursor: pointer; transition: all 0.3s ease; white-space: nowrap; }
+    .download-btn:hover { color: rgba(10, 10, 10, 1); border-color: rgba(10, 10, 10, 1); transform: scale(0.95); }
+    .download-btn:disabled { opacity: 0.8; cursor: not-allowed; }
+    .download-btn.downloading { color: rgba(163, 163, 163, 1); border-color: rgba(229, 229, 229, 1); background: rgba(250, 250, 250, 1); }
+    .download-btn.success { color: rgb(22, 163, 74); border-color: rgba(134, 239, 172, 1); background: rgba(220, 252, 231, 1); animation: successPulse 0.4s ease-out; }
+    .memories-section { padding: 6rem 0; background: rgba(0, 0, 0, 0.4); border-top: 1px solid rgba(255, 255, 255, 0.05); }
+    .memories-header { padding: 0 1.5rem 2.5rem; margin-bottom: 4rem; display: flex; justify-content: space-between; align-items: flex-end; border-bottom: 1px solid rgba(255, 255, 255, 0.05); max-width: 80rem; margin-left: auto; margin-right: auto; }
+    .memories-title { font-family: 'Playfair Display', serif; font-size: 2.25rem; font-weight: 700; letter-spacing: -0.02em; color: white; }
+    .memories-subtitle { font-size: 0.625rem; font-weight: 700; color: rgba(197, 160, 89, 0.6); text-transform: uppercase; letter-spacing: 0.6em; margin-top: 0.5rem; }
+    .memories-description { font-size: 0.5625rem; font-weight: 900; text-transform: uppercase; letter-spacing: 0.3em; color: rgba(255, 255, 255, 0.1); font-style: italic; }
+    .film-strip { display: flex; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none; -ms-overflow-style: none; gap: 1.5rem; padding: 1rem 1.5rem; }
+    .film-strip::-webkit-scrollbar { display: none; }
+    .film-item { flex: 0 0 280px; scroll-snap-align: start; }
+    .memory-card { position: relative; aspect-ratio: 4/5; background: rgba(38, 38, 38, 1); overflow: hidden; border: 1px solid rgba(255, 255, 255, 0.05); transition: all 0.5s ease; }
+    .memory-card:hover { transform: scale(1.02); }
+    .memory-image { width: 100%; height: 100%; object-fit: cover; opacity: 0.6; filter: grayscale(100%); transition: all 1s ease; }
+    .memory-card:hover .memory-image { opacity: 1; filter: grayscale(0); transform: scale(1.1); }
+    .memory-gradient { position: absolute; inset: 0; background: linear-gradient(to top, black, transparent, transparent); opacity: 0.8; }
+    .memory-info { position: absolute; bottom: 1.5rem; left: 1.5rem; right: 1.5rem; transform: translateY(1rem); transition: transform 0.5s ease; }
+    .memory-card:hover .memory-info { transform: translateY(0); }
+    .memory-date { font-size: 0.625rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.3em; color: rgba(197, 160, 89, 0.8); margin-bottom: 0.5rem; }
+    .memory-title { font-family: 'Playfair Display', serif; font-size: 1.25rem; color: white; font-weight: 700; line-height: 1.2; }
+    .ending-card { display: flex; flex-direction: column; align-items: center; justify-content: center; opacity: 0.2; border: 1px dashed rgba(255, 255, 255, 0.05); aspect-ratio: 4/5; padding: 2.5rem; }
+    .ending-text { font-family: 'Playfair Display', serif; font-size: 1.5rem; font-style: italic; color: rgba(255, 255, 255, 0.4); text-align: center; line-height: 1.3; }
+    footer { padding: 8rem 1.5rem; text-align: center; border-top: 1px solid rgba(255, 255, 255, 0.05); background: #050505; }
+    .footer-content { max-width: 64rem; margin: 0 auto; }
+    .footer-quote { font-family: 'Playfair Display', serif; font-size: clamp(1.5rem, 4vw, 2.25rem); font-style: italic; color: rgba(255, 255, 255, 0.2); line-height: 1.3; font-weight: 500; letter-spacing: -0.02em; margin-bottom: 5rem; }
+    .footer-links { display: flex; justify-content: center; gap: 2.5rem; font-size: 0.625rem; font-weight: 900; text-transform: uppercase; letter-spacing: 0.6em; color: rgba(255, 255, 255, 0.3); margin-bottom: 2.5rem; }
+    .footer-links a { color: inherit; text-decoration: none; transition: color 0.3s ease; }
+    .footer-links a:hover { color: var(--accent); }
+    .footer-signature { padding-top: 4rem; }
+    .footer-name { font-family: 'Homemade Apple', cursive; font-size: clamp(2rem, 5vw, 3rem); color: rgba(255, 255, 255, 0.4); margin-bottom: 0.5rem; }
+    .footer-years { font-size: 0.5625rem; font-weight: 900; text-transform: uppercase; letter-spacing: 1.2em; color: rgba(255, 255, 255, 0.1); }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); filter: blur(10px); } to { opacity: 1; transform: translateY(0); filter: blur(0); } }
+    @keyframes textReveal { from { opacity: 0; clip-path: inset(0 100% 0 0); } to { opacity: 1; clip-path: inset(0 0 0 0); } }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    @keyframes successPulse { 0% { transform: scale(1); } 50% { transform: scale(1.05); background-color: #f0f0f0; } 100% { transform: scale(1); } }
+    html { scroll-behavior: smooth; }
+    @media (max-width: 768px) { .stats { gap: 1.5rem; } .stat-divider { display: none; } .letter-paper { padding: 2rem; } .letter-text { font-size: 1.5rem; } .letter-footer { flex-direction: column; align-items: center; } .signature-block { align-items: center; } .memories-description { display: none; } .footer-quote br { display: none; } }
+  </style>
+</head>
+<body>
+  <div class="grain-overlay"></div>
+  <div id="toast" class="toast"><p>lol what did u expect its work in progress</p></div>
+
+  <header>
+    <div class="watermark"><h1>MEMOIR</h1></div>
+    <div class="hero-content">
+      <p class="subtitle">almost four years in the making</p>
+      <h2 class="main-title">A chapter <br/> <span class="underline">concludes.</span></h2>
+      <p class="intro-text">From flipgrid, teams and GroupMe, it's been an incredible journey. I'm Shivangi Pande, and these are my final letters to the architects of my growth.</p>
+      <div class="stats">
+        <div class="stat"><p class="stat-number">47</p><p class="stat-label">Months of Growth</p></div>
+        <div class="stat-divider"></div>
+        <div class="stat"><p class="stat-number">7</p><p class="stat-label">Managers</p></div>
+        <div class="stat-divider"></div>
+        <div class="stat"><p class="stat-number">5</p><p class="stat-label">Products Built</p></div>
+        <div class="stat-divider"></div>
+        <div class="stat"><p class="stat-number">1B+</p><p class="stat-label">Users Impacted</p></div>
+      </div>
+    </div>
+  </header>
+
+  <section id="letters" class="note-section">
+    <div class="selector-container">
+      <p class="selector-label">Recipient Registry</p>
+      <div class="select-wrapper">
+        <select id="colleagueSelect"><option value="">Click here to find your letter</option></select>
+        <div class="select-arrow"><svg width="12" height="12" viewBox="0 0 10 10" fill="none"><path d="M2 4L5 7L8 4" stroke="white" stroke-width="2.5" stroke-linecap="round"/></svg></div>
+      </div>
+    </div>
+    <div id="contentArea"></div>
+  </section>
+
+  <section id="memories" class="memories-section">
+    <div class="memories-header">
+      <div><h3 class="memories-title">The Archive</h3><p class="memories-subtitle">2022 &mdash; 2026</p></div>
+      <p class="memories-description">A visual timeline of growth.</p>
+    </div>
+    <div class="film-strip" id="filmStrip"></div>
+  </section>
+
+  <footer>
+    <div class="footer-content">
+      <p class="footer-quote">"We leave pieces of ourselves <br /> in the rooms we inhabit."</p>
+      <div class="footer-links">
+        <a href="https://linkedin.com/in/pandeshivangi" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+        <a href="#" id="portfolioLink">Portfolio</a>
+        <a href="mailto:shivangi1997@gmail.com">Email</a>
+      </div>
+      <div class="footer-signature">
+        <p class="footer-name">Shivangi Pande</p>
+        <p class="footer-years">MMXXII &mdash; MMXXVI</p>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+const CUSTOM_MESSAGES = {
+      'Team GroupMe': 'A dream team blessed with heart, soul, and the power to make anything possible. College kids are picky, yet they love what we built. Thank you for your patience and for making magic real.',
+      'Team TFL': 'Reimagining legacy taught me the foundations of accessibility and scale. Lessons that will anchor everything I create. Thank you for this transformative chapter.',
+      'Team SMB': 'The most dedicated and warm team I have known. You weathered storms of reorgs with grace and supported design changes with patience. Thank you for everything.',
+      'Team Flip': 'My first team, my foundation. Here I learned the tools and skills that shaped my journey. Thank you for trusting me when I was lost. This is where it all began.',
+      'Team One Camera': 'Though brief, our OBT time revealed something rare: a team whose warmth anyone would dream of. Thank you for setting high standards in craft and culture.',
+      'Team Admin App': 'Small but mighty. User studies with you felt less like work and more like fun collaboration. Thank you for encouraging me at every turn.',
+      'Anupama': 'My first PM partner, my most promising one. Your clarity, empathy, and yes, even your organized Figma files showed me what true partnership looks like. Forever grateful.',
+      'Satya': 'A gem, a confidant, a soul bond. You gave me courage in tough times and grace when I gave you mine. Thank you for being my anchor.',
+      'Vijayta': 'Your honest rigor and never-give-up spirit inspire me. Your brutal but kind advice shaped me. You are someone I will always look up to and stay connected with.',
+      'JT': 'More than a rockstar, you are the rock of SXC. Your calm clarity, empathetic leadership, and ownership of both wins and flaws taught me what true leadership means. Thank you for your wisdom.',
+      'Rishabh': 'Rishu bhai, the OG of gedi gang. Your dedication, clarity, and ownership in everything, even making that movie, showed me what commitment looks like. We will stay in touch, always.',
+      'Somesh': 'A force I learned from and looked up to. Your rigor, quality, and honest resilience inspired me. Our sprint was short, but your spirit left a mark. Noida misses you.',
+      'Siddique': 'Calm, empathetic, and utterly reliable. Since you joined, you made tough calls feel manageable. Thank you for your dedication. Noida misses you.',
+      'Kashish': 'Welcome to Noida. I am sad we will not work together longer, but I found a great friend in you. Your craft and attention to detail are gifts any team would treasure.',
+      'Pria': 'The definition of girlboss. Your clarity, positivity, and leadership brought light to dark times. Thank you for trusting me, being patient, and showing me what excellence looks like.',
+      'Siddhant': 'We have transitioned through orgs together, always diligent, always calm. Your clarity in chaos inspired me. Thank you for trusting and supporting me throughout.',
+      'Justin': 'Two of Microsoft\'s most loved products, one visionary leader. Your clarity is unmatched. Thank you for your patience and for entrusting me with GroupMe\'s best team.',
+      'David': 'Your detailed thinking, calm cheerfulness, and openness to ideas taught me so much. Thank you for your patience when I was lost in ambiguity.',
+      'Deepak': 'Thank you for bringing me to Studio+91. This studio became my haven where I flourished and learned skills I will carry for life. Forever grateful.',
+      'Vishal': 'My first manager, my foundation builder. You trusted me to own entire features of Flip and taught me the basics. Thank you for laying my design groundwork.',
+      'Ranjana': 'Diligent, hardworking, and never shy about appreciating work or welcoming new ideas. Your warmth made every interaction meaningful. I wish we had worked more closely.',
+      'Chetram': 'Diligent, efficient, quietly resolving designs through lunches. Your dedication never went unnoticed. Thank you for being such a vital part of our team.',
+      'Janhavi': 'Passionate and talented to the core. Your dedication to details shows in everything you create. Thank you for your support.',
+      'Mayank': 'You have always asked the right questions, pushing decisions toward what users truly need. Thank you for your thoughtfulness and support.',
+      'Manbendra': 'Your calm confidence made every project worry-free. Working with you meant reassurance. Thank you for your steady presence.',
+      'Ashish': 'Quiet but clear, easy and reassuring. Working with you brought peace of mind. Thank you for your support.',
+      'Rima': 'Fun, supportive, and building so much from scratch on Android. You are the teammate anyone would dream of. Thank you for everything.',
+      'Christian': 'You taught me how to organize and detail every corner and edge case. Thank you for asking important questions and for your patience always.',
+      'Anubhuti': 'My first friend at Microsoft. Though we did not work together, our conversations showed me your focus and dedication. Thank you for the insights.',
+      'Nikhil': 'Though brief, I learned so much from your calm, patient leadership. Grateful for the chance to be guided by you.',
+      'Prakash': 'My sole cheerleader in tough times. Thank you for trusting me with GroupMe and offering guidance exactly when I needed it most.',
+      'Shveta': 'One of the most inspiring leaders I know. Your calm way of handling tough conversations and your openness inspire me. Thank you for always believing in me.',
+      'George': 'An absolute rockstar who knows what users need and advocates for them fiercely. Thank you for your patience and support in building beloved products.',
+      'Chirag': 'Our time was short but knowing you, your unique design journey, your money wisdom, has been great. Let us stay in touch.',
+      'Chaithanya': 'Pleasant, dedicated, and bringing smiles to every conversation. Your work shows your dedication. Thank you for brightening my days.',
+      'Jatin': 'Supportive, kind, and leading one of Microsoft\'s best dev teams building at incredible speed. Your openness to ideas inspires. Thank you for your patience.',
+      'Eemon': 'A star whose chats bring laughter and insider news. Your talent and rigor shine through. I will be stalking your work from the corners, always.',
+      'Nithin': 'You gave me an ear when I needed it most. You heard me and empowered me. Your focus on craft and team support inspires. Thank you for guiding me through that messy rant.',
+      'Meher': 'You are such a vibe, lighting up every room you enter. Your energy is contagious and your presence unforgettable.',
+      'Isha': 'Fun to hang with, somehow related, and it makes total sense. Thank you for your UX Day enthusiasm and for always making my day brighter.',
+      'Abhijeet': 'Two products, countless memories. Your FHL videos became the soundtrack to our shared journey. A reminder that great work and genuine joy can coexist.',
+      'Adithya': 'You were Bangalore\'s anchor for our team. Always listening, always supporting. Thank you for being the steady voice that turned troubles into solutions.',
+      'Akshat': 'You have been the architect of my growth here. Your patience and guidance did not just shape my abilities, they shaped who I have become. Forever grateful.',
+      'Alivia': 'Pure sunshine in every conversation. Even in fleeting moments, you made me feel seen and comfortable. I know we will stay in touch.',
+      'Amal': 'Your work on Daily Briefing became my silent benchmark. A standard of dedication and craft I aspired to reach. Thank you for inspiring me through your quiet excellence.',
+      'Amit': 'You are an absolute hero. Your coaching in my toughest moments transformed confusion into clarity. Thank you for making me feel empowered when I needed it most.',
+      'Amya': 'Your upbeat spirit made every day brighter. Making that movie with the OG gang is etched in my heart forever. You bring charm and warmth to everything you touch.',
+      'Anand': 'Though our time was brief, every conversation left me inspired. Your fresh perspective, whether planning decks or simple trips, opened my mind in the best ways.',
+      'Anant': 'Thank you for trusting me with UX Day Noida. That mammoth task became a defining moment in my journey. A lesson for life I will carry forward always.',
+      'Anchal': 'An absolute charmer. Our brief overlap in OPG revealed your gift: the way you carry yourself and warm up any room. I am so glad our paths crossed.',
+      'Ananya': 'UX Day\'s pillar of support. You calmed tensions, solved problems, and made the impossible possible. Our time was small but deeply meaningful. Thank you for everything.',
+      'Flora': 'You are our foundation. Steady, essential, and always there. Thank you for being the bedrock we built upon.',
+      'Joash': 'Limited pockets of time, but every interaction brought joy. Thank you for making each moment count.',
+      'Sachin': 'Your craft is amazing. I always looked up to your calm, empathetic conversations. Thank you for setting such a beautiful example.',
+      'Deepika D': 'Honest, chill, and always fun to work with. You brought ease to every collaboration. Thank you for the good times.',
+      'Vaibhav Ve': 'Passionate and chill, a rare combination. Your energy made every project better. Thank you for being you.',
+      'Vaibhav Vi': 'An absolute rockstar. Your passion for accessibility inspires me endlessly. Though brief, our sprints were incredibly rewarding. Thank you for leading the way.',
+      'Prabin': 'Your innate love for understanding how things work resonates deeply with me. I will always be stalking your side projects. Thank you for the inspiration.',
+      'Lovekesh': 'The calm, supportive partner any designer dreams of. You brought clarity to every conversation. Thank you for your patience and support.',
+      'Mrigank': 'Though brief, working with you taught me many things. Thank you for being a partner in all discussions, even the chaotic ones.',
+      'Divya': 'A constant support, always resolving tough situations together. Thank you for being there through it all.',
+      'Yash': 'Proactive, supportive, and helping designs come to life. Thank you for making everything possible.',
+      'Komal': 'Our time together was a firecracker. Some of the most enjoyable and creative work I have done. Your adaptability and complex thinking inspire me. Thank you for your patience.',
+      'Avinash': 'The backbone of SXC. You make anything possible and kept everything our team needed organized. Forever grateful for your support.',
+      'Anish': 'Great conversations despite never crossing work paths. Your thoughtfulness, empathy, and ability to warm up any room inspire me. Thank you for everything.',
+      'Ankur': 'I am so glad to start my Microsoft journey in your team. You supported my work, shared it with others, and helped me fit in. Thank you for guiding me through ambiguity.',
+      'Garima': 'The pillar of NH44. Your proactive planning and problem solving amaze me. I always looked up to your ability to manage so many things at once.',
+      'Neha': 'Though brief, you offered me an ear for all my worries and brainstormed solutions with me. Thank you for everything.',
+      'Navneet': 'Your 1C work was something I constantly opened to learn from. You taught me that design requires great problem solving above all else. Thank you for being someone I look up to.',
+      'Sarah': 'An exceptional leader. The PowerPoint team is a warm space of passionate designers because of you. Your calm voice and judgment-free listening inspire me. Thank you.',
+      'Rhea': 'Though brief, knowing you has been fun. Your bubbly, infectious personality brightens every room.',
+      'Tanuja': 'We have known each other the longest. It is a shame we did not work directly together. But knowing your talent, warmth, and fun spirit has been a pleasure.',
+      'Laad': 'Your conversations are always fun and thought-provoking. Talking to you feels effortless. Hopefully we will work together in the future. Thank you for teaching me cheere.'
+    };
+
+    const MEMORIES = [
+      {id:'m1',title:'Sovereign Gold Bonds',date:'',imageUrl:'https://lh3.googleusercontent.com/d/10vIAjVJDR_JX8Uto28Id2l8INV91FIN6'},
+      {id:'m2',title:'Team Snacks',date:'',imageUrl:'https://lh3.googleusercontent.com/d/11MYKuL06qvoF2HzXnPqn8HHKLmyw0NG7'},
+      {id:'m3',title:'Design Week',date:'',imageUrl:'https://lh3.googleusercontent.com/d/18qwufHN8qNE1iHAC3IIViPGVauOUeW4w'},
+      {id:'m4',title:'Watch Party',date:'',imageUrl:'https://lh3.googleusercontent.com/d/1AjPvvq6x_zqLnVjGazc18YXbM9afxE7D'},
+      {id:'m5',title:'UXDAY Prep',date:'',imageUrl:'https://lh3.googleusercontent.com/d/1IL1vvO1PcNgm9AUlvRJAT-78ZX23356m'},
+      {id:'m6',title:'Team hang',date:'',imageUrl:'https://lh3.googleusercontent.com/d/1ITAUdNlDqyHm5V0kqBSi5DDP2scv_0uN'},
+      {id:'m7',title:'GroupMe Diya',date:'',imageUrl:'https://lh3.googleusercontent.com/d/1JzR4NMbYLd1V--T36HBCkv0dom1C09TS'},
+      {id:'m8',title:'UXDAY Team',date:'',imageUrl:'https://lh3.googleusercontent.com/d/1MLeU__yBTZhC50BCbZ-5oz2iyQjeMAN6'},
+      {id:'m9',title:'Mob+Segments',date:'',imageUrl:'https://lh3.googleusercontent.com/d/1Mla9BHv1OWdOe48jN31Rgg-HLL2qsKwO'},
+      {id:'m10',title:'AI Day',date:'',imageUrl:'https://lh3.googleusercontent.com/d/1NN7hI4mJ9AmQA_Ot6FlHUUKSx9yJ33WC'},
+      {id:'m11',title:'Bangalore',date:'',imageUrl:'https://lh3.googleusercontent.com/d/1OJ7wlGskZE5HUmXT9Eqma7CU8djyuvsu'},
+      
+      {id:'m13',title:'Mom @ MS',date:'',imageUrl:'https://lh3.googleusercontent.com/d/1QmJDQ_pwz3IGxhQWs7ixrM_R3qbSzZqp'},
+      {id:'m14',title:'Focus Time',date:'',imageUrl:'https://lh3.googleusercontent.com/d/1WuWz8QqV51kHfl3iYY8xwdO9UAVmRFLZ'},
+      {id:'m15',title:'Standup in Pune',date:'',imageUrl:'https://lh3.googleusercontent.com/d/1XIGd1kX2clUiEZzyDh1FxmM1OIKcRU5_'},
+      {id:'m16',title:'Bug Bash',date:'',imageUrl:'https://lh3.googleusercontent.com/d/1Z46HIthF6-fLv6Fd73pwfNhwprzWxA1T'},
+      {id:'m17',title:'MS Wedding',date:'',imageUrl:'https://lh3.googleusercontent.com/d/1Z87uMtBO0X0D2cj7jSLGZIvPgaeNjgZe'},
+      {id:'m18',title:'WFH',date:'',imageUrl:'https://lh3.googleusercontent.com/d/1ZHNJ4VhoX0ZEmcAUND6hxntzc2bG1Z4Z'},
+      {id:'m19',title:'GG',date:'',imageUrl:'https://lh3.googleusercontent.com/d/1_Bt4guLxY5yoP9Qw72kQWmP74hMaRbx5'},
+      {id:'m20',title:'A11y',date:'',imageUrl:'https://lh3.googleusercontent.com/d/1a1YI_zR1fqI_u0JaWMq62QTdANxGTPH1'},
+      {id:'m21',title:'FHL pride',date:'',imageUrl:'https://lh3.googleusercontent.com/d/1a64wkF08IhUpUGghNmL59ht9HVph6_vp'},
+      {id:'m22',title:'Khan market',date:'',imageUrl:'https://lh3.googleusercontent.com/d/1aquhexTg-ky-GgBxIMQ16dUIwgUIkPyf'},
+      {id:'m23',title:'KP',date:'',imageUrl:'https://lh3.googleusercontent.com/d/1eNNU2ukaCryUBpjOWjcv_Z1MqKxHbIfc'},
+      {id:'m24',title:'Segments',date:'',imageUrl:'https://lh3.googleusercontent.com/d/1ecUnQ9jLh2gvu5oC24Zv-Joze_IpiJug'},
+      {id:'m25',title:'MS everywhere',date:'',imageUrl:'https://lh3.googleusercontent.com/d/1ehypCb191W5AMW9imFHP3CXDA8Mr9Jzu'},
+      {id:'m26',title:'1Camera OBT',date:'',imageUrl:'https://lh3.googleusercontent.com/d/1fqd9kuSJwLg8u9MNcQZaadDaUVaF-H1Q'},
+      {id:'m27',title:'OG Gedi Gang ',date:'',imageUrl:'https://lh3.googleusercontent.com/d/1gLzPVsMDy446Mwn2mwjbiQY-__m61bhE'},
+      {id:'m28',title:'UXDAY 2',date:'',imageUrl:'https://lh3.googleusercontent.com/d/1gelocpXbJ5oKYO-LiR0xljcM-QzQa8zL'},
+      {id:'m29',title:'Deck the TV',date:'',imageUrl:'https://lh3.googleusercontent.com/d/1hCHbEVpNHDcS3-os391n1KpNzZEsmGRp'},
+      {id:'m30',title:'Wedding videos',date:'',imageUrl:'https://lh3.googleusercontent.com/d/1jFe9ddsQdabhUivyDfoEQkinE0k1N6TJ'},
+      {id:'m31',title:'BTS script',date:'',imageUrl:'https://lh3.googleusercontent.com/d/1l4kgKim_pnJRF4qZ05AE1NJnVED84eoG'},
+      {id:'m32',title:'Grandpa got swag',date:'',imageUrl:'https://lh3.googleusercontent.com/d/1mf91STU2zf7nH9ffkk1zO3HMGoGd5DyG'},
+      {id:'m33',title:'GM x Sundar',date:'',imageUrl:'https://lh3.googleusercontent.com/d/1ml3v7Si7Y4e2c9unAnYh8J3hmwnyPpoi'},
+      {id:'m34',title:'FHL',date:'',imageUrl:'https://lh3.googleusercontent.com/d/1nM2ZnvA3u7VBp8jjh4WvET4epqN4kkRz'},
+      {id:'m35',title:'???',date:'',imageUrl:'https://lh3.googleusercontent.com/d/1nzLtTs9Yb1r3lufcmiQEr_hvkBzJsZdj'},
+      {id:'m36',title:'Hyderabad',date:'',imageUrl:'https://lh3.googleusercontent.com/d/1o7WCBL6qgAIfUH5zlTdOfH-50mjWenfe'},
+      {id:'m37',title:'NH44 Squad',date:'',imageUrl:'https://lh3.googleusercontent.com/d/1pDwQukVYssaIqmz15qWfKax0hZzFDuHs'},
+      {id:'m38',title:'Satya',date:'',imageUrl:'https://lh3.googleusercontent.com/d/1q84BUE0ySE32eBgwikPnpuPKHE21T3T0'},
+      {id:'m39',title:'Design Week',date:'',imageUrl:'https://lh3.googleusercontent.com/d/1rV6UqOX4fOAFPsM8WQI2PuxXzF1tkhBc'},
+      {id:'m40',title:'Family at Work',date:'',imageUrl:'https://lh3.googleusercontent.com/d/1sgA43X-OAn7cUB2zWrD2SI-IX3dL6Bgm'},
+      {id:'m41',title:'Design Throwdown',date:'',imageUrl:'https://lh3.googleusercontent.com/d/1sodxRBiwu5zjFJlFA6GZSiB1Xos6wcna'},
+      {id:'m42',title:'Hyd Gedi',date:'',imageUrl:'https://lh3.googleusercontent.com/d/1spbDcmK4l716mvxD_KLcevIYqB2BH5ab'},
+      {id:'m43',title:'Segments',date:'',imageUrl:'https://lh3.googleusercontent.com/d/1uIbpNywRbyi09QH6LYG3TRBawsjHMQbK'},
+     
+    ];
+
+    const DEFAULT_TEMPLATES = ["Working alongside you on products that reach millions has been the highlight of my journey. Your brilliance made the hard days easy and the good days unforgettable. Thank you for everything.","As I look back on these four years, your support stands out as a constant. You have taught me so much about resilience and creativity. I am leaving with a heart full of gratitude for our shared time.","The projects we built together are a point of pride, but the friendship we shared is what I will carry with me. Thank you for being such an essential part of my story here since 2022.","Your dedication and kindness have left an indelible mark on me. It has been an honor to share this space and these massive milestones with you. Wishing you nothing but the best.","They say we leave pieces of ourselves in the rooms we inhabit. I hope the piece I leave behind serves as a small thank you for the immense impact you have had on my career and my growth.","From the early brainstorms to the final launches, every moment shared with you was a lesson in excellence. Thank you for being the incredible human and teammate you are."];
+
+    const NAMES = ["Team GroupMe","Team TFL","Team SMB","Team Flip","Team One Camera","Team Admin App","Anupama","Satya","Vijayta","JT","Amya","Rishabh","Anchal","Somesh","Siddique","Kashish","Akshat","Amit","Pria","Siddhant","Justin","David","Deepak","Vishal","Ranjana","Chetram","Janhavi","Mayank","Manbendra","Ashish","Rima","Christian","Anubhuti","Nikhil","Prakash","Shveta","George","Chirag","Chaithanya","Jatin","Lovekesh","Mrigank","Divya","Abhijeet","Yash","Adithya","Komal","Avinash","Alivia","Amal","Anish","Flora","Anand","Joash","Sachin","Deepika D","Vaibhav Ve","Vaibhav Vi","Prabin","Meher","Isha","Ankur","Garima","Neha","Navneet","Sarah","Rhea","Tanuja","Laad"];
+
+    const COLLEAGUES = NAMES.sort().map((name, index) => ({id: `col-${index}`, name: name}));
+    let currentState = {selectedId: '', customName: '', generatedNote: '', isLoading: false, envelopeOpen: false, downloadStatus: 'idle'};
+
+    function getMessageForPerson(name) {
+      if (CUSTOM_MESSAGES[name]) return CUSTOM_MESSAGES[name];
+      let hash = 0;
+      for (let i = 0; i < name.length; i++) hash = name.charCodeAt(i) + ((hash << 5) - hash);
+      return DEFAULT_TEMPLATES[Math.abs(hash) % DEFAULT_TEMPLATES.length];
+    }
+
+    function showToast() {
+      const toast = document.getElementById('toast');
+      toast.classList.add('show');
+      setTimeout(() => toast.classList.remove('show'), 3000);
+    }
+
+    function renderEnvelope(name, note) {
+      return `<div class="envelope-container"><div class="envelope-base ${currentState.envelopeOpen ? 'open' : ''}" id="envelopeBase"><div class="envelope-flap" onclick="handleEnvelopeClick()"><div class="flap-close-text" style="text-align:center;width:100%;">Close Letter</div></div><div class="letter-paper" id="letterPaper"><div class="letter-texture"></div><div class="letter-header"><p class="letter-greeting">Dear ${name},</p><div class="letter-divider"></div></div><div class="letter-content"><p class="letter-text">"${note}"</p></div><div class="letter-footer"><div style="flex:1;"></div><div class="signature-block"><div style="text-align:right;"><p class="signature-name">Shivangi</p><p class="signature-date">2022 &mdash; 2026</p></div><div style="padding-top:0.5rem;"><button onclick="handleDownload()" id="downloadBtn" class="download-btn ${currentState.downloadStatus}" ${currentState.downloadStatus !== 'idle' ? 'disabled' : ''}><div style="position:relative;width:12px;height:12px;display:flex;align-items:center;justify-content:center;">${getDownloadIcon()}</div><span>${getDownloadText()}</span></button></div></div></div></div></div></div>`;
+    }
+
+    function getDownloadIcon() {
+      if (currentState.downloadStatus === 'idle') return '<svg style="width:100%;height:100%;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" /></svg>';
+      if (currentState.downloadStatus === 'downloading') return '<svg style="width:100%;height:100%;animation:spin 1s linear infinite;" viewBox="0 0 24 24"><circle style="opacity:0.25;" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4" fill="none"></circle><path style="opacity:0.75;" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>';
+      return '<svg style="width:100%;height:100%;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7" /></svg>';
+    }
+
+    function getDownloadText() {
+      if (currentState.downloadStatus === 'idle') return 'Download Letter';
+      if (currentState.downloadStatus === 'downloading') return 'Capturing...';
+      return 'Saved';
+    }
+
+    function handleEnvelopeClick() {
+      if (currentState.envelopeOpen) {
+        currentState.envelopeOpen = false;
+        setTimeout(() => {
+          currentState.selectedId = '';
+          currentState.generatedNote = '';
+          currentState.customName = '';
+          document.getElementById('colleagueSelect').value = '';
+          updateContent();
+        }, 800);
+      }
+      const envelope = document.getElementById('envelopeBase');
+      if (envelope) envelope.classList.toggle('open');
+    }
+
+    function handleSelectChange(e) {
+      const value = e.target.value;
+      currentState.selectedId = value;
+      if (!value) {
+        currentState.generatedNote = '';
+        currentState.envelopeOpen = false;
+        updateContent();
+        return;
+      }
+      const colleague = COLLEAGUES.find(c => c.id === value);
+      if (colleague) {
+        currentState.envelopeOpen = false;
+        const note = getMessageForPerson(colleague.name);
+        currentState.generatedNote = note;
+        updateContent();
+        setTimeout(() => {
+          currentState.envelopeOpen = true;
+          const envelope = document.getElementById('envelopeBase');
+          if (envelope) envelope.classList.add('open');
+        }, 100);
+      }
+    }
+
+async function handleDownload() {
+  if (currentState.downloadStatus !== 'idle') return;
+  currentState.downloadStatus = 'downloading';
+  updateContent();
+
+  try {
+    const letterPaper = document.getElementById('letterPaper');
+    if (!letterPaper) return;
+
+    // 1. Ensure html2canvas is loaded
+    if (typeof html2canvas === 'undefined') {
+      const script = document.createElement('script');
+      script.src = 'https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js';
+      document.head.appendChild(script);
+      await new Promise((resolve) => (script.onload = resolve));
+    }
+
+    // 2. Wait for fonts to be ready
+    await document.fonts.ready;
+
+    // 3. Force visibility and wait for any remaining CSS transitions
+    const originalStyle = letterPaper.style.cssText;
+    letterPaper.style.opacity = "1";
+    letterPaper.style.transform = "none";
+    letterPaper.style.transition = "none";
+    
+    // Select all children and force their opacity (to bypass fadeIn animations)
+    const children = letterPaper.querySelectorAll('.letter-header, .letter-content, .letter-text, .letter-footer');
+    children.forEach(el => {
+      el.style.opacity = "1";
+      el.style.animation = "none";
+    });
+
+    await new Promise(resolve => setTimeout(resolve, 300));
+
+    // 4. Capture
+    const canvas = await html2canvas(letterPaper, {
+      scale: 2,
+      useCORS: true,
+      allowTaint: false, // Set to false to avoid security blocks
+      backgroundColor: '#F9F9F7',
+      logging: false,
+      onclone: (clonedDoc) => {
+        // Double-check visibility in the cloned DOM used for rendering
+        const clonedLetter = clonedDoc.getElementById('letterPaper');
+        clonedLetter.style.opacity = "1";
+      }
+    });
+
+    // 5. Cleanup styles
+    letterPaper.style.cssText = originalStyle;
+    children.forEach(el => {
+      el.style.opacity = "";
+      el.style.animation = "";
+    });
+
+    // 6. Download
+    const url = canvas.toDataURL('image/png');
+    const link = document.createElement('a');
+    const colleague = COLLEAGUES.find(c => c.id === currentState.selectedId);
+    const name = colleague ? colleague.name : 'Farewell';
+    link.download = `shivangi-farewell-${name.replace(/\s+/g, '-').toLowerCase()}.png`;
+    link.href = url;
+    link.click();
+
+    currentState.downloadStatus = 'success';
+    updateContent();
+    setTimeout(() => {
+      currentState.downloadStatus = 'idle';
+      updateContent();
+    }, 2500);
+
+  } catch (err) {
+    console.error('Download failed', err);
+    currentState.downloadStatus = 'idle';
+    updateContent();
+  }
+}
+function updateContent() {
+  const contentArea = document.getElementById('contentArea');
+  if (currentState.generatedNote) {
+    const colleague = COLLEAGUES.find(c => c.id === currentState.selectedId);
+    const name = colleague ? colleague.name : currentState.customName;
+    contentArea.innerHTML = renderEnvelope(name, currentState.generatedNote);
+    setTimeout(() => {
+      contentArea.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }, 400);
+    return;
+  }
+  contentArea.innerHTML = '';
+}
+
+function init() {
+  const select = document.getElementById('colleagueSelect');
+  COLLEAGUES.forEach(colleague => {
+    const option = document.createElement('option');
+    option.value = colleague.id;
+    option.textContent = colleague.name;
+    select.appendChild(option);
+  });
+  select.addEventListener('change', handleSelectChange);
+  const filmStrip = document.getElementById('filmStrip');
+  MEMORIES.forEach(memory => {
+    const card = document.createElement('div');
+    card.className = 'film-item';
+    card.innerHTML = `<div class="memory-card"><img src="${memory.imageUrl}" alt="${memory.title}" class="memory-image" /><div class="memory-gradient"></div><div class="memory-info"><p class="memory-date">${memory.date}</p><h3 class="memory-title">${memory.title}</h3></div></div>`;
+    filmStrip.appendChild(card);
+  });
+  const endingCard = document.createElement('div');
+  endingCard.className = 'film-item';
+  endingCard.innerHTML = '<div class="ending-card"><p class="ending-text">To new <br/>beginnings...</p></div>';
+  filmStrip.appendChild(endingCard);
+  document.getElementById('portfolioLink').addEventListener('click', (e) => {
+    e.preventDefault();
+    showToast();
+  });
+  const params = new URLSearchParams(window.location.search);
+  const id = params.get('id');
+  if (id) {
+    currentState.selectedId = id;
+    select.value = id;
+    handleSelectChange({ target: { value: id } });
+  }
+}
+
+init();</script>
+</body>
+</html>
